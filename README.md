@@ -1,13 +1,11 @@
 # centrifuge-sort
 
-**a p-to-q holding place for a small impossible sorter.**
+**This is a [[p → q]](https://github.com/p-to-q/) project.**
 
-This is a P2Q project.
-
-The artifact lives in one file: [`centrifuge-sort.py`](./centrifuge-sort.py).
+This repository exists as the organization home for that file.
+The original gist remains the source-shaped public reference.
 
 Source gist:
 https://gist.github.com/Jah-yee/e12aa64a1a739d9749fdc5955a653740
 
-This repository exists as the organization home for that file.
-The original gist remains the source-shaped public reference.
+The gist lives in one file in this case: [`centrifuge-sort.py`](./centrifuge-sort.py).
