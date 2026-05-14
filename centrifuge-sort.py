@@ -471,6 +471,8 @@ if __name__ == "__main__":
 #
 # Physical sorting theory [Materials][Superb]
 # The theory reference: encode -> physical transform -> readout, plus the record-linkage lesson.
+# It is the reason particles keep id, and the reason readout is explicit rather than treated as free.
+#   https://www.niallmurphy.me/papers/MNWHDDBW2006c.pdf
 #   https://dna.hamilton.ie/assets/dw/MNWHDDBW2008p.pdf
 #
 # Natural sorting family [Materials][Useful]
