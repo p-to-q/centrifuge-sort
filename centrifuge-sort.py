@@ -2,6 +2,8 @@
 The most atomic way to simulate and audit Centrifuge Sort in pure, dependency-free Python.
 This file is the complete physical algorithm.
 Everything else is instrumentation.
+
+@p-to-q / @Jah-yee · ptoq.io
 Source gist: https://gist.github.com/Jah-yee/e12aa64a1a739d9749fdc5955a653740
 """
 
