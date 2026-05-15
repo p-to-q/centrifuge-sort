@@ -5,10 +5,10 @@
 This repository exists as the organization home for that file.<br/>
 The original gist remains the source-shaped public reference.
 
-<table>
+<table align="center">
   <tr>
-    <td>
-     <img width="50%" alt="figure_09_centrifuge_process" src="https://github.com/user-attachments/assets/82cb6424-668f-409c-8c0d-8e0431ec5b72" />
+    <td align="center">
+      <img width="50%" alt="figure_09_centrifuge_process" src="https://github.com/user-attachments/assets/82cb6424-668f-409c-8c0d-8e0431ec5b72" />
     </td>
   </tr>
 </table>
