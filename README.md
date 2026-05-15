@@ -8,7 +8,7 @@ The original gist remains the source-shaped public reference.
 <table>
   <tr>
     <td>
-      <img width="1496" height="1496" alt="figure_09_centrifuge_process" src="https://github.com/user-attachments/assets/82cb6424-668f-409c-8c0d-8e0431ec5b72" />
+     <img width="100%" alt="figure_09_centrifuge_process" src="https://github.com/user-attachments/assets/82cb6424-668f-409c-8c0d-8e0431ec5b72" />
     </td>
   </tr>
 </table>
