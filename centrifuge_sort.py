@@ -15,7 +15,6 @@ from dataclasses import dataclass
 KEYS = [7, 2, 9, 4, 4, 1, 6, 8, 3, 5]
 
 RANDOM_SEED = 1337
-random.seed(RANDOM_SEED)
 
 def make_keys(n=10, lo=1, hi=9, seed=RANDOM_SEED):
     # Fixed keys make the first run stable.
@@ -77,7 +76,7 @@ class Particle:
     d: float
     r: float = R0
     v: float = 0.0
-    crossed_at: object = None
+    crossed_at: float | None = None
 
 
 def check_keys(keys):
@@ -94,6 +93,7 @@ def check_keys(keys):
 # The sorting law is dr/dt = [d^2 * (rho_particle - rho_fluid(r)) / (18 eta)] * omega^2 * r.
 # Equal particle and fluid density means neutral buoyancy.
 # A positive gradient turns neutral buoyancy into a stable radius.
+# This is an overdamped terminal-velocity model, not a full inertial fluid simulation.
 
 def rho_fluid(r):
     return RHO_FLUID_AT_R0 + RHO_GRADIENT * (r - R0)
@@ -146,6 +146,7 @@ def euler_stiffness_scale():
 #     id only gives a stable readout convention.
 
 def encode(keys):
+    keys = list(keys)
     check_keys(keys)
 
     lo, hi = min(keys), max(keys)
@@ -194,20 +195,28 @@ def model_warnings(particles):
 # scipy would give better solvers, but it would hide the one equation this file is about.
 # Here the update rule stays explicit: radius changes through the particle, the medium, and the centrifugal field.
 
+def detector_threshold():
+    return R0 + 0.75 * (R_WALL - R0)
+
+
 def step(particles, t, dt):
-    threshold = R0 + 0.75 * (R_WALL - R0)
+    threshold = detector_threshold()
 
     for p in particles:
-        v = radial_velocity(p, p.r)
-        r = p.r + v * dt
+        old_r = p.r
+        v = radial_velocity(p, old_r)
+        new_r = old_r + v * dt
+
+        if p.crossed_at is None and old_r < threshold <= new_r and new_r != old_r:
+            alpha = (threshold - old_r) / (new_r - old_r)
+            p.crossed_at = t + alpha * dt
+
+        r = new_r
 
         if r < R0:
             r = R0
         if r > R_WALL:
             r = R_WALL
-
-        if p.crossed_at is None and r >= threshold:
-            p.crossed_at = t
 
         p.v = v
         p.r = r
@@ -232,28 +241,27 @@ def run(particles, steps=STEPS, dt=DT):
 #     the code keeps id order.
 #     the model reports the pair as unresolved.
 
-def observe_radius(particles):
-    def radius_bin(p):
-        return round(p.r / READOUT_RESOLUTION)
+def radius_bin(p):
+    return round((p.r - R0) / READOUT_RESOLUTION)
 
+
+def observe_radius(particles):
     return sorted(particles, key=lambda p: (radius_bin(p), p.id))
 
 
-def observe_crossing_time(particles):
-    # Alternative detector view: threshold crossing preserves the C++ visual idea without using fake outward drift.
-    def crossing_key(p):
-        if p.crossed_at is None:
-            return (0, p.id)
-        return (1, -p.crossed_at, p.id)
-
-    return sorted(particles, key=crossing_key)
+def threshold_detector_events(particles):
+    # Earlier events usually correspond to faster outward motion, not ascending sort order.
+    return sorted(
+        (p for p in particles if p.crossed_at is not None),
+        key=lambda p: (p.crossed_at, p.id),
+    )
 
 
 def unresolved_pairs(order):
     pairs = []
 
     for a, b in zip(order, order[1:]):
-        if abs(a.r - b.r) < READOUT_RESOLUTION:
+        if radius_bin(a) == radius_bin(b) and a.key != b.key:
             pairs.append((a.id, b.id))
 
     return pairs
@@ -281,7 +289,7 @@ def runtime_warnings(order):
 
     unresolved = unresolved_pairs(order)
     if unresolved:
-        warnings.append("some neighboring radii are below readout resolution")
+        warnings.append("some different keys share a readout bin")
 
     max_re = max(reynolds_number(p) for p in order)
     if max_re > 1.0:
@@ -323,6 +331,7 @@ def cost_ledger(keys):
 
 
 def centrifuge_sort(keys=KEYS):
+    keys = list(keys)
     particles = encode(keys)
     warnings = model_warnings(particles)
 
@@ -356,7 +365,7 @@ def print_lanes(order):
 
 def print_table(order):
     print()
-    print(" id  key      rho_p    rho_f(r)    r_final    v_final        Re   crossed      r_eq")
+    print(" id  key      rho_p    rho_f(r)    r_final    v_model        Re   crossed      r_eq")
 
     for p in order:
         req = equilibrium_radius(p)
@@ -390,6 +399,10 @@ def demo(keys=KEYS):
 
     for warning in report["warnings"]:
         print(f"warning:  {warning}")
+
+    events = threshold_detector_events(order)
+    detector = "none" if not events else " ".join(f"{p.key:g}@{p.crossed_at:.3f}s" for p in events)
+    print(f"threshold detector: {detector}")
 
     print_lanes(order)
     print_table(order)

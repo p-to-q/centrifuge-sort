@@ -8,4 +8,4 @@ The original gist remains the source-shaped public reference.
 Source gist:
 https://gist.github.com/Jah-yee/e12aa64a1a739d9749fdc5955a653740
 
-The gist lives in one file in this case: [`centrifuge-sort.py`](./centrifuge-sort.py).
+The gist lives in one file in this case: [`centrifuge_sort.py`](./centrifuge_sort.py).
