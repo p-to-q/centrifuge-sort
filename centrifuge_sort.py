@@ -56,7 +56,7 @@ PARTICLE_RHO_HIGH = 1180.0  # kg/m^3, density assigned to the largest key
 
 DT = 0.005                  # s, simulation step
 STEPS = 6000                # 30 seconds of simulated spin
-READOUT_RESOLUTION = 1e-5   # m, closer than this is unresolved by this observer
+READOUT_RESOLUTION = 1e-5   # m per readout bin; different keys in the same bin are unresolved
 
 EPS = 1e-12
 
@@ -235,10 +235,13 @@ def run(particles, steps=STEPS, dt=DT):
 # observe_radius() is the ideal observer that reads those positions.
 # This step is explicit because readout is part of physical sorting, not background work.
 #
-# If two radii fall into the same readout bin:
+# If two different keys fall into the same readout bin:
 #     the observer cannot separate them by radius.
 #     the code keeps id order.
 #     the model reports the pair as unresolved.
+#
+# If two equal keys share a bin:
+#     that is a physical tie, not a warning.
 
 def radius_bin(p):
     return round((p.r - R0) / READOUT_RESOLUTION)
