@@ -3,7 +3,7 @@ The most atomic way to simulate and audit Centrifuge Sort in pure, dependency-fr
 This file is the complete physical algorithm.
 Everything else is instrumentation.
 
-@p-to-q / @Jah-yee · ptoq.io
+@p-to-q / @Jah-yee / ptoq.io
 """
 
 import math
@@ -315,6 +315,8 @@ def audit(keys, order, warnings):
 
 
 def cost_ledger(keys):
+    keys = list(keys)
+
     # The ledger is here because physical sorting does not remove cost.
     # It moves cost into encoding, fabrication, motion, precision, space, and readout.
     return {
@@ -385,6 +387,7 @@ def print_table(order):
 
 
 def demo(keys=KEYS):
+    keys = list(keys)
     order, report = centrifuge_sort(keys)
 
     print("Centrifuge Sort")
