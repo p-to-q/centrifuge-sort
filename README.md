@@ -10,4 +10,21 @@ The original gist remains the source-shaped public reference.
 Source gist:
 https://gist.github.com/Jah-yee/e12aa64a1a739d9749fdc5955a653740
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/0143217a-26de-4938-bf6d-5e44e46e6c66" width="100%" alt="figure_06_particle_trajectories" />
+      <br><sub>figure_06_particle_trajectories</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/fbd7409a-6ceb-410e-b776-5d87df891c4e" width="100%" alt="figure_05_small_n_with_bogo" />
+      <br><sub>figure_05_small_n_with_bogo</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/b57f79a4-36c6-43f3-a7b1-6bb7558a5804" width="100%" alt="figure_04_runtime_comparison" />
+      <br><sub>figure_04_runtime_comparison</sub>
+    </td>
+  </tr>
+</table>
+
 The gist lives in one file in this case: [`centrifuge_sort.py`](./centrifuge_sort.py).
