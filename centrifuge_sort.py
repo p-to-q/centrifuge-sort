@@ -93,6 +93,9 @@ def check_keys(keys):
 # Equal particle and fluid density means neutral buoyancy.
 # A positive gradient turns neutral buoyancy into a stable radius.
 # This is an overdamped terminal-velocity model, not a full inertial fluid simulation.
+# Angular spin is intentionally not modeled as a separate state.
+# In this file it only matters through the radial forcing term omega^2 * r;
+# the visible "it is rotating" part does not change the ordering math or the readout.
 
 def rho_fluid(r):
     return RHO_FLUID_AT_R0 + RHO_GRADIENT * (r - R0)
